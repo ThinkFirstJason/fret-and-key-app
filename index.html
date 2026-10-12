@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c0e1c">
+  <!-- installable on iPhone / Android: Safari → Share → Add to Home Screen -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Fret &amp; Key">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <title>Fret &amp; Key — Guitar &amp; Piano Theory Studio</title>
+  <meta name="description" content="Interactive music theory for guitar and piano: scales, chords, circle of fifths, song keys and progressions, ear-training drills and Spotify play-along.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Caveat:wght@600;700&family=Playfair+Display:wght@600&family=Noto+Music&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ff7a59'/%3E%3Cpath d='M22 46V20l24-6v26' stroke='%23fff' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='17' cy='46' r='6' fill='%23fff'/%3E%3Ccircle cx='41' cy='40' r='6' fill='%23fff'/%3E%3C/svg%3E">
+</head>
+<body class="mode-guitar">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Fret and Key home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40"><rect x="1" y="1" width="38" height="38" rx="11"/><path d="M14 29V13l14-4v16"/><circle cx="11" cy="29" r="4"/><circle cx="25" cy="25" r="4"/></svg>
+      </span>
+      <span class="brand-text"><span>Fret <span class="amp">&amp;</span> Key</span><small>Music Theory Studio</small></span>
+    </a>
+    <div class="mode-switch" role="tablist" aria-label="Instrument">
+      <button role="tab" data-mode="guitar" aria-selected="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 2.4l2 2-3.2 3.2-1-.2-4.3 4.3c.6 1.6.3 3.4-.9 4.6-.7.7-1.7 1-2.6 1.1-.1 1.3-.6 2.6-1.6 3.6-2 2-5.1 2.1-6.8.4s-1.6-4.8.4-6.8c1-1 2.3-1.5 3.6-1.6.1-.9.4-1.9 1.1-2.6 1.2-1.2 3-1.5 4.6-.9l4.3-4.3-.2-1z"/></svg>
+        Guitar
+      </button>
+      <button role="tab" data-mode="piano" aria-selected="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="M7 4v9M12 4v9M17 4v9M7 13v7M12 13v7M17 13v7" stroke-width="1.6"/></svg>
+        Piano
+      </button>
+      <span class="mode-glider" aria-hidden="true"></span>
+    </div>
+    <div class="top-actions">
+      <div class="mixer-wrap">
+        <label class="vol" title="Master volume — everything Fret &amp; Key plays">
+          <button class="mute-btn" id="muteBtn" aria-label="Mute"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="waves" d="M16 9a4 4 0 010 6M18.5 6.5a7.5 7.5 0 010 11" fill="none"/></svg></button>
+          <input type="range" id="volume" min="0" max="1" step="0.01" aria-label="Master volume">
+        </label>
+        <button class="icon-btn" id="mixerBtn" title="Mixer — instruments, metronome and your recordings" aria-label="Mixer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+        </button>
+        <div class="mixer" id="mixer" hidden></div>
+      </div>
+      <button class="icon-btn" id="themeBtn" title="Toggle light / dark theme" aria-label="Toggle theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="stage-card" id="stageCard">
+      <div class="stage-head">
+        <div class="stage-title">
+          <span class="eyebrow" id="stageEyebrow">Scale</span>
+          <h2 id="stageTitle">—</h2>
+          <div class="stage-sub" id="stageSub"></div>
+        </div>
+        <div class="stage-tools">
+          <div class="seg" id="labelSeg" role="group" aria-label="Marker labels">
+            <button data-label="note">Notes</button><button data-label="interval">Intervals</button><button data-label="none">Dots</button>
+          </div>
+          <button class="tool-btn guitar-only" id="zoomBtn" title="Switch between full guitar and fretboard close-up"></button>
+          <button class="tool-btn guitar-only" id="flipBtn" title="Flip string order (low string on top / bottom)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16M7 4L3 8M7 4l4 4M17 20V4M17 20l-4-4M17 20l4-4"/></svg><span>Flip</span>
+          </button>
+          <button class="tool-btn" id="inputBtn" title="Play along with a MIDI keyboard/guitar or an audio interface">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 01-10 0zM12 16v5"/></svg><span>Input</span><i class="input-dot" id="inputDot"></i>
+          </button>
+          <button class="tool-btn accent" id="customizeBtn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 100 18c1 0 1.6-.8 1.6-1.6 0-.5-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6h1.9A4.8 4.8 0 0021 10.8C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.3"/><circle cx="10.5" cy="7" r="1.3"/><circle cx="15" cy="7.5" r="1.3"/></svg><span>Customize</span>
+          </button>
+        </div>
+      </div>
+      <div class="stage" id="stage">
+        <div class="stage-spot" aria-hidden="true"></div>
+        <div id="guitarHost" class="inst-host guitar-host"></div>
+        <div id="pianoHost" class="inst-host piano-host"></div>
+        <div class="now-pill" id="nowPill" aria-live="polite"></div>
+        <div class="ribbon" id="songRibbon" hidden></div>
+        <div class="input-hud" id="inputHud" hidden></div>
+      </div>
+      <div class="input-panel card c-teal" id="inputPanel" hidden></div>
+      <div class="stage-foot">
+        <div class="legend" id="legend"></div>
+        <div class="hint" id="stageHint"></div>
+      </div>
+    </section>
+
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" data-tab="scales"><svg viewBox="0 0 24 24"><path d="M3 18l4-4 4 3 4-6 6 4"/><circle cx="7" cy="14" r="1.6"/><circle cx="11" cy="17" r="1.6"/><circle cx="15" cy="11" r="1.6"/></svg>Scales</button>
+      <button role="tab" data-tab="chords"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 8h16M9 3v18M15 3v18"/><circle cx="9" cy="12" r="1.8" fill="currentColor"/><circle cx="15" cy="16" r="1.8" fill="currentColor"/></svg>Chords</button>
+      <button role="tab" data-tab="circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 3v4.5M12 16.5V21M3 12h4.5M16.5 12H21"/></svg>Circle of Fifths</button>
+      <button role="tab" data-tab="songs"><svg viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>Songs</button>
+      <button role="tab" data-tab="learn"><svg viewBox="0 0 24 24"><path d="M3 6.5C6 5 9 5 12 6.8 15 5 18 5 21 6.5V19c-3-1.5-6-1.5-9 .3-3-1.8-6-1.8-9-.3z"/><path d="M12 6.8v12.5"/></svg>Learn</button>
+      <button role="tab" data-tab="practice"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>Practice</button>
+      <button role="tab" data-tab="customize"><svg viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Customize</button>
+    </nav>
+
+    <section class="panel" data-panel="scales" id="panel-scales"></section>
+    <section class="panel" data-panel="chords" id="panel-chords"></section>
+    <section class="panel" data-panel="circle" id="panel-circle"></section>
+    <section class="panel" data-panel="songs" id="panel-songs"></section>
+    <section class="panel" data-panel="learn" id="panel-learn"></section>
+    <section class="panel" data-panel="practice" id="panel-practice"></section>
+    <section class="panel" data-panel="customize" id="panel-customize"></section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-wave" aria-hidden="true"><svg viewBox="0 0 1200 40" preserveAspectRatio="none"><path d="M0 20 Q 75 0 150 20 T 300 20 T 450 20 T 600 20 T 750 20 T 900 20 T 1050 20 T 1200 20"/></svg></div>
+    <p class="kbd-help"><strong>Fret&amp;Key</strong> · built for curious players. Keyboard shortcuts: <kbd>←</kbd>/<kbd>→</kbd> move the scale window · <kbd>Space</kbd> play/stop · in piano mode play with <kbd>A</kbd>–<kbd>K</kbd> (<kbd>Z</kbd>/<kbd>X</kbd> change octave).</p>
+    <p class="muted">Song keys, progressions and tempos are simplified teaching transcriptions — trust your ears.</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+  <div class="live" id="liveChords" role="dialog" aria-label="Chord screen" hidden></div>
+  <div class="install-tip" id="installTip" hidden></div>
+
+  <script src="js/core.js"></script>
+  <script src="js/theory.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/guitar.js"></script>
+  <script src="js/piano.js"></script>
+  <script src="js/data-songs.js"></script>
+  <script src="js/data-learn.js"></script>
+  <script src="js/spotify.js"></script>
+  <script src="js/sheet.js"></script>
+  <script src="js/analyze.js"></script>
+  <script src="js/transfer.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/panel-input.js"></script>
+  <script src="js/panel-scales.js"></script>
+  <script src="js/panel-chords.js"></script>
+  <script src="js/panel-circle.js"></script>
+  <script src="js/panel-songs.js"></script>
+  <script src="js/panel-learn.js"></script>
+  <script src="js/panel-practice.js"></script>
+  <script src="js/panel-customize.js"></script>
+  <script src="js/wake.js"></script>
+  <script src="js/boot.js"></script>
+</body>
+</html>

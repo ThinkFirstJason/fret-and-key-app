@@ -1,0 +1,9 @@
+Piano samples used by Fret & Key (trimmed, converted to mono OGG, 2-3 velocity layers kept)
+
+grand/   Salamander Grand Piano V3 (Yamaha C5) by Alexander Holm
+         Creative Commons Attribution 3.0 — http://creativecommons.org/licenses/by/3.0/
+         FreePats edition: http://freepats.zenvoid.org/Piano/acoustic-grand-piano.html
+
+upright/ Upright Piano KW (Kawai upright) recorded by Gonzalo and Roberto for FreePats
+         Creative Commons CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+         http://freepats.zenvoid.org/Piano/acoustic-grand-piano.html#UprightKW
